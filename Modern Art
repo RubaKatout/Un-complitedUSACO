@@ -1,0 +1,93 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+#define debug(x) cout << '[' << #x << " is: " << x << "] " << endl;
+#define inF freopen("5.in" , "r" , stdin);
+#define outF freopen("5.out" , "w" , stdout);
+#define imod(a , n) (a % n + n ) % n
+#define sor(v) sort(v.begin() , v.end());
+#define print(v) for(auto f : v ) cout << f << " " ;
+#define rsor(v) sort(v.rbegin() , v.rend());
+#define rev(v) reverse(v.begin() , v.end());
+#define scan(v)for(auto &it : v)cin >> it ;
+#define ll long long
+
+#define logar(x , y) log(x) / log(y)
+#define __sum(n) n * (n + 1) / 2
+#define __lcm(a , b) a / __gcd(a , b) * b
+#define pii pair<int , int >
+#define fastio ios_base::sync_with_stdio(false);cin.tie(0);
+
+//#define int ll
+
+const int N =  51 ,  M = N * 4  , MX = 2e4 + 40;
+const ll MOD = 1e9 + 7 , oo = 1e9 + 9 , OO = 1e18 , mod = MOD ;
+const double pi = acos(-1) , eps = 1e-17 ;
+
+int di[] = {1 , -1 , 0 , 0};
+int dj[] = {0 , 0 , 1 , -1};
+int n;
+
+int arr[1003][1003];
+
+bool check(int i , int j){
+
+    return i < n && j < n && i > -1 && j > -1 && !!arr[i][j] ;
+
+
+
+}
+
+
+int32_t main()
+{
+    // inF;
+  inF;outF;
+    fastio;
+
+    //int n ;
+    cin >> n ;
+
+   // int arr[n][n];
+
+    for(int i = 0 ; i < n ; i ++)
+        for(int j = 0 ; j < n ; j ++)cin >> arr[i][j];
+
+
+    int ans = n * n ;
+
+
+    map<int , int > mp ,m ;
+
+    for(int i = 0 ; i < n ; i ++){
+        for(int j = 0 ; j < n ; j ++){
+
+            if(arr[i][j] == 0)continue ;
+            m[arr[i][j]] ++ ;
+            if(check(i - 1 , j) && check(i , j - 1) && arr[i - 1][j] == arr[i][j - 1] && arr[i][j] != arr[i][j - 1])
+                mp[arr[i][j]] ++ ;
+            else if(check(i - 1 , j) && check(i + 1 , j ) && arr[i - 1][j] == arr[i + 1][j] && arr[i][j] != arr[i + 1][j])
+                mp[arr[i][j]] ++ ;
+            else if(check(i - 1 , j) && check(i  , j + 1 ) && arr[i - 1][j] == arr[i ][j+ 1] && arr[i][j] != arr[i][j + 1])
+                mp[arr[i][j]] ++ ;
+
+            else if(check(i  , j - 1) && check(i + 1 , j ) && arr[i][j - 1] == arr[i + 1][j] && arr[i][j] != arr[i + 1][j])
+                mp[arr[i][j]] ++ ;
+            else if(check(i   , j - 1) && check(i   , j + 1 ) && arr[i][j - 1] == arr[i][j + 1] && arr[i][j] != arr[i][j + 1])
+                mp[arr[i][j]] ++ ;
+            else if(check(i + 1 , j) && check(i  , j + 1 ) && arr[i + 1][j] == arr[i][j + 1] && arr[i][j] != arr[i][j + 1])
+                mp[arr[i][j]] ++ ;
+
+
+        }
+
+    }
+
+
+    if(m.size() == 1)ans -- ;
+    ans -= mp.size();
+    cout << ans ;
+
+
+}
