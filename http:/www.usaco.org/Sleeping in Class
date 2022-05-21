@@ -1,0 +1,91 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+#define debug(x) cout << '[' << #x << " is: " << x << "] " << endl;
+#define inF freopen("cardgame.in" , "r" , stdin);
+#define outF freopen("cardgame.out" , "w" , stdout);
+#define imod(a , n) (a % n + n ) % n
+#define sor(v) sort(v.begin() , v.end());
+#define print(v) for(auto f : v ) cout << f << " " ;
+#define rsor(v) sort(v.rbegin() , v.rend());
+#define rev(v) reverse(v.begin() , v.end());
+#define scan(v)for(auto &it : v)cin >> it ;
+#define ll long long
+
+#define logar(x , y) log(x) / log(y)
+#define __sum(n) n * (n + 1) / 2
+#define __lcm(a , b) a / __gcd(a , b) * b
+#define pii pair<int , int >
+#define fastio ios_base::sync_with_stdio(false);cin.tie(0);
+
+
+
+int32_t main()
+{
+    // inF;
+   // inF;outF;
+    fastio;
+
+    int n ;
+    cin >> n ;
+
+    ll arr[n];
+    ll sum = 0 , summ ;
+    vector<ll >v ;
+
+    for(int i = 0 ; i < n ; i ++){
+        cin >> arr[i];
+
+        sum += arr[i];
+    }
+    summ = sum ;
+    set<ll> st ;
+
+    int q;
+    cin >> q ;
+
+
+    while(q--){
+
+        ll a;
+        cin >> a ;
+
+
+        v.push_back(a);
+
+        if(sum % a == 0)st.insert(a);
+
+
+
+    }
+    map<ll , ll>mp;
+
+    for(auto f : st){
+
+        ll ans = 0 ;
+        sum = 0 ;
+
+        //debug(f)
+        for(int i = 0 ; i < n ; i ++){
+
+            if(sum)ans ++;
+            sum += arr[i];
+
+            //debug(sum)
+            ans += (sum - 1) / f;
+            sum %= f ;
+
+
+        }
+
+        mp[f] = ans ;
+
+    }
+
+    for(auto f : v){
+        if(summ % f)cout << -1 ;
+        else cout << mp[f];
+        cout << '\n';
+    }
+}
