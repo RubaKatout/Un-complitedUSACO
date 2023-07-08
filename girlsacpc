@@ -1,0 +1,184 @@
+#include<bits/stdc++.h>
+
+using namespace std;
+
+#define debug(x) cout << '[' << #x << " is: " << x << "] " << endl;
+#define imod(a , n) (a % n + n ) % n
+
+#define fastio ios_base::sync_with_stdio(false);cin.tie(0);
+#define inF freopen("ladder.in","r",stdin );
+#define outF freopen("ladder.out" , "w" , stdout ) ;
+#define sor(v) sort(v.begin() , v.end());
+#define print(v) for(auto f : v ) cout << f << " " ;
+#define rsor(v) sort(v.rbegin() , v.rend());
+#define rev(v) reverse(v.begin() , v.end());
+#define scan(v) for(auto &it : v)cin >> it ;
+
+#define logar(x , y) log(x) / log(y)
+#define __sum(n) n * (n + 1) / 2
+#define __lcm(a , b) a / __gcd(a , b) * b
+#define pii pair<int , int >
+//#define ll long long
+//#define int ll
+#define matrix vector<vector<ll>>
+#define pii pair<int , int >
+const int N = 3e3 + 5 , M = N * 4;
+
+
+int dsu[N] , sz[N];
+long double xs[N][3] , ys[N][3];
+
+struct data{
+
+
+    long double a , b , r ;
+
+
+} arr[N];
+
+int get(int u){
+
+
+    if(u == dsu[u])return u ;
+
+
+    return dsu[u] = get(dsu[u]);
+
+
+}
+#define ld long double
+long double dis(pair<long double , long double> a , pair<ld , ld> b){
+
+
+    return ((a.first - b.first) * (a.first - b.first) + (a.second - b.second) * (a.second - b.second)) ;
+
+
+}
+const long double eps = 1e-16 ;
+bool isconnected(int u , int v){
+
+
+    long double d = dis({arr[u].a , arr[u].b} , {arr[v].a , arr[v].b});
+
+
+    return d - (sqrt(arr[u].r) + sqrt(arr[v].r)) * (sqrt(arr[u].r) + sqrt(arr[v].r))  <= eps;
+
+}
+bool connectdsu(int u , int v){
+
+    return get(u) == get(dsu[v]);
+
+}
+void connect(int u , int v){
+
+
+    u = get(u) , v = get(v);
+    if(u == v)return ;
+
+    if(sz[u] > sz[v])swap(u , v);
+
+    sz[v] += sz[u];
+    dsu[u] = v ;
+
+
+}
+
+struct edge{
+
+    int u , v ;
+    long double dis ;
+
+
+    bool operator < (const edge & other) const{
+
+
+        return dis - other.dis < eps ;
+
+    }
+
+};
+
+ld roundy(ld a){
+
+    long long i1 = a , ip = i1 + 1 ;
+
+   // ld i = i1 , ip = ip1 ;
+
+    ip = a * 10 ;
+    ip = round(ip);
+
+    ip = a ;
+
+    if(a - ip >= .5)ip ++ ;
+    //debug((ip - a))
+    return ip;
+
+}
+int32_t main()
+
+{
+
+    fastio;
+
+
+    int n ;
+    cin >> n ;
+
+
+    for(int i = 1 ; i <= n ; i ++){
+        for(int j = 0 ; j < 3 ; j ++)cin >> xs[i][j] >> ys[i][j];
+
+
+        long double c = xs[i][0] * xs[i][0] + ys[i][0] * ys[i][0] -
+                        xs[i][1] * xs[i][1] - ys[i][1] * ys[i][1] ;
+
+
+
+        long double c2 = xs[i][0] * xs[i][0] + ys[i][0] * ys[i][0] -
+                         xs[i][2] * xs[i][2] - ys[i][2] * ys[i][2] ;
+
+
+
+        long double x = 2 * xs[i][0] - 2 * xs[i][1] , x1 = 2 * xs[i][0] - 2 * xs[i][2] ;
+        long double y = 2 * ys[i][0] - 2 * ys[i][1] , y1 = 2 * ys[i][0] - 2 * ys[i][2] ;
+
+        long double b = (c * x1 - c2 * x) / (y * x1 - y1 * x);
+        long double a = (c - y * b) / x ;
+        long double r = ((xs[i][0] - a) * (xs[i][0] - a) + (ys[i][0] - b) * (ys[i][0] - b));
+
+        arr[i] = {a , b , r};
+
+
+       // cout << a << " " << b << " " << r << endl ;
+
+    }
+
+
+    for(int i = 1 ; i <= n ; i ++)dsu[i] = i , sz[i] = 1 ;
+
+    vector<edge> v ;
+
+    for(int i = 1 ; i <= n ; i ++){
+        for(int j = i + 1 ; j <= n ; j ++){
+            if(isconnected(i , j)){
+
+                    connect(i , j);
+
+            }
+            else v.push_back({i , j , dis({arr[i].a , arr[i].b} , {arr[j].a , arr[j].b}) });
+        }
+    }
+
+    sor(v);
+    long double ans = 0 ;
+    for(auto f : v){
+        if(connectdsu(f.u , f.v))continue ;
+        ans += sqrt(f.dis) ;
+        connect(f.u , f.v);
+
+    }
+
+
+    cout << roundy(ans) ;
+
+}
